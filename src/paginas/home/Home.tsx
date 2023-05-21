@@ -1,14 +1,31 @@
-import React from "react";
-import "./Home.css";
-import App from "../../App";
+import React from 'react';
+import {Typography, Grid, Button} from '@material-ui/core';
+import {Box} from '@mui/material';
+import './Home.css';
 
-function Home(){
-    return(
+function Home() {
+    return (
         <>
-            <h1>Home</h1>
-            <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fbr%2Ffoto%2Fador%25C3%25A1vel-cachorro-de-%25C3%25B3culos-trabalhando-com-computador-gm1214325113-353256203&psig=AOvVaw2TE1GiSqZ3jsYmy576klNI&ust=1683941932626000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCMDZ0NfS7v4CFQAAAAAdAAAAABAE" alt="Imagem Tela Inicial" />
-            
+            <Grid container direction="row" justifyContent="center" alignItems="center" style={{ backgroundColor: "#3F51B5" }}>
+                <Grid alignItems="center" item xs={6}>
+                    <Box paddingX={20} >
+                        <Typography variant="h3" gutterBottom color="textPrimary" component="h3" align="center" style={{ color: "white", fontWeight: "bold" }}>Seja bem vindo(a)!</Typography>
+                        <Typography variant="h5" gutterBottom color="textPrimary" component="h5" align="center" style={{ color: "white", fontWeight: "bold" }}>expresse aqui os seus pensamentos e opiniões!</Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="center">
+                        <Box marginRight={1}>
+                        </Box>
+                        <Button variant="outlined" style={{ borderColor: "white", backgroundColor: "#3F51B5", color: "white" }}>Ver Postagens</Button>
+                    </Box>
+                </Grid>
+                <Grid item xs={6} >
+                    <img src="https://i.imgur.com/H88yIo2.png" alt="" width="500px" height="500px" />
+                </Grid>
+                <Grid xs={12} style={{ backgroundColor: "white" }}>
+                </Grid>
+            </Grid>
         </>
     );
 }
+
 export default Home;
