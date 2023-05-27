@@ -8,6 +8,7 @@ import CadastroPost from '../cadastroPost/CadastroPost';
 import {Box} from '@mui/material';
 
 
+
 function getModalStyle() {
   const top = 50 ;
   const left = 50;
@@ -63,14 +64,14 @@ function ModalPostagem () {
         variant="outlined"
         className="btnModal"
         onClick={handleOpen}>Nova Postagem</Button>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         {body}
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

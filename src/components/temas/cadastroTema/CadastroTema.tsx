@@ -1,82 +1,95 @@
-import React, {useState, useEffect} from 'react'
-import { Link } from 'react-router-dom'
-import {Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
-import {Box} from '@mui/material';
+import React, {useState, useEffect, ChangeEvent} from 'react'
+import { Container, Typography, TextField, Button } from "@material-ui/core"
+import {useNavigate, useParams } from 'react-router-dom'
+import './CadastroTema.css';
 import Tema from '../../../models/Tema';
-import './ListaTema.css';
-import {useNavigate} from 'react-router-dom';
-import { busca } from '../../../services/Service';
+import { buscaId, post, put } from '../../../services/Service';
 import { useSelector } from 'react-redux';
 import { TokenState } from '../../../store/tokens/tokensReducer';
 
-function ListaTema() {
-  const [temas, setTemas] = useState<Tema[]>([])
-  let navigate = useNavigate();
-  const token = useSelector<TokenState, TokenState["tokens"]>(
-    (state) => state.tokens
-  );
-
-  useEffect(()=>{
-    if(token == ''){
-      alert("Você precisa estar logado")
-      navigate("/login")
-    }
-  }, [token])
 
 
-  async function getTema(){
-    await busca("/tema", setTemas, {
-      headers: {
-        'Authorization': token
-      }
+function CadastroTema() {
+    let navigate = useNavigate();
+    const { id } = useParams<{id: string}>();
+    const token = useSelector<TokenState, TokenState["tokens"]>(
+        (state) => state.tokens
+      );
+    const [tema, setTema] = useState<Tema>({
+        id: 0,
+        descricao: ''
     })
-  }
 
+    useEffect(() => {
+        if (token == "") {
+            alert("Você precisa estar logado")
+            navigate("/login")
+    
+        }
+    }, [token])
 
-  useEffect(()=>{
-    getTema()
-  }, [temas.length])
+    useEffect(() =>{
+        if(id !== undefined){
+            findById(id)
+        }
+    }, [id])
 
-  return (
-    <>
-    {
-      temas.map(tema =>(
-      <Box m={2} >
-        <Card variant="outlined">
-          <CardContent>
-            <Typography color="textSecondary" gutterBottom>
-              Tema
-            </Typography>
-            <Typography variant="h5" component="h2">
-             {tema.descricao}
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Box display="flex" justifyContent="center" mb={1.5} >
+    async function findById(id: string) {
+        buscaId(`/tema/${id}`, setTema, {
+            headers: {
+              'Authorization': token
+            }
+          })
+        }
 
-              <Link to={`/formularioTema/${tema.id}`} className="text-decorator-none">
-                <Box mx={1}>
-                  <Button variant="contained" className="marginLeft" size='small' color="primary" >
-                    atualizar
-                  </Button>
-                </Box>
-              </Link>
-              <Link to={`/deletarTema/${tema.id}`} className="text-decorator-none">
-                <Box mx={1}>
-                  <Button variant="contained" size='small' color="secondary">
-                    deletar
-                  </Button>
-                </Box>
-              </Link>
-            </Box>
-          </CardActions>
-        </Card>
-      </Box>
-      ))
-      }
-    </>
-  );
+        function updatedTema(e: ChangeEvent<HTMLInputElement>) {
+
+            setTema({
+                ...tema,
+                [e.target.name]: e.target.value,
+            })
+    
+        }
+        
+        async function onSubmit(e: ChangeEvent<HTMLFormElement>) {
+            e.preventDefault()
+            console.log("tema " + JSON.stringify(tema))
+    
+            if (id !== undefined) {
+                console.log(tema)
+                put(`/tema`, tema, setTema, {
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                alert('Tema atualizado com sucesso');
+            } else {
+                post(`/tema`, tema, setTema, {
+                    headers: {
+                        'Authorization': token
+                    }
+                })
+                alert('Tema cadastrado com sucesso');
+            }
+            back()
+    
+        }
+    
+        function back() {
+            navigate('/temas')
+        }
+  
+    return (
+        <Container maxWidth="sm" className="topo">
+            <form onSubmit={onSubmit}>
+                <Typography variant="h3" color="textSecondary" component="h1" align="center" >Formulário de cadastro tema</Typography>
+                <TextField value={tema.descricao} onChange={(e: ChangeEvent<HTMLInputElement>) => updatedTema(e)} id="descricao" label="descricao" variant="outlined" name="descricao" margin="normal" fullWidth />
+                <Button type="submit" variant="contained" color="primary">
+                    Finalizar
+                </Button>
+            </form>
+        </Container>
+    )
 }
 
-
-export default ListaTema;
+export default CadastroTema;
