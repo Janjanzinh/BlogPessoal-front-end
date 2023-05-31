@@ -10,7 +10,7 @@ function Footer() {
   const token = useSelector<TokenState, TokenState["tokens"]>(
     (state) => state.tokens
   );
-
+  footerComponent
   var footerComponent;
 
   if (token !== "") {
