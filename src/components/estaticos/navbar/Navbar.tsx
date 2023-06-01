@@ -1,94 +1,91 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography} from '@material-ui/core';
-import {Box} from '@mui/material';
-import { Link } from 'react-router-dom';
-import {useNavigate } from 'react-router-dom'
-import './Navbar.css'
-import { useSelector } from 'react-redux';
-import { TokenState } from '../../../store/tokens/tokensReducer';
-import { useDispatch } from "react-redux";
-import { addToken } from '../../../store/tokens/actions';
-import {toast} from 'react-toastify';
+import { AppBar, Toolbar, Box, Typography } from "@material-ui/core";
+import "./Navbar.css";
+import { Grid } from "@mui/material";
+import { Link, useNavigate, } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { TokenState } from "../../../store/tokens/tokensReducer";
+import { addToken } from "../../../store/tokens/actions";
+import { toast } from 'react-toastify';
 
 function Navbar() {
-    const token = useSelector<TokenState, TokenState["tokens"]>(
-        (state) => state.tokens
-      );
-    let navigate = useNavigate();
-    const dispatch = useDispatch();
-    
-    function goLogout(){
-        dispatch(addToken(''));
-        toast.info('Usuário deslogado', {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: false,
-            draggable: false,
-            theme: "colored",
-            progress: undefined,
-        });
-        navigate('/login')
-    }
+  const navigate = useNavigate();
+  const token = useSelector<TokenState, TokenState["tokens"]>(
+    (state) =>state.tokens
+  );
 
-    var navbarComponent;
+  const dispatch = useDispatch();
 
-    if(token != ""){
-        navbarComponent = <AppBar position="static">
-        <Toolbar variant="dense">
-            <Box className='cursor'>
-                <Typography variant="h5" color="inherit">
-                    BlogPessoal
-                </Typography>
-            </Box>
+  function goLogout(){
+    dispatch(addToken(''))
+    toast.info('usuario deslogado', {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: false,
+      theme: "colored",
+      progress: undefined,
+    });
+    navigate('/login')
+  }
 
-            <Box display="flex" justifyContent="start">
-                <Link to="/home" className="text-decorator-none">
-                    <Box mx={1} className='cursor'>
-                        <Typography variant="h6" color="inherit">
-                            home
-                        </Typography>
-                    </Box>
-                </Link>
-                <Link to="/posts" className="text-decorator-none">
-                    <Box mx={1} className='cursor'>
-                        <Typography variant="h6" color="inherit">
-                            postagens
-                        </Typography>
-                    </Box>
-                </Link>
-                <Link to="/temas" className="text-decorator-none">
-                <Box mx={1} className='cursor'>
-                    <Typography variant="h6" color="inherit">
-                        temas
-                    </Typography>
-                </Box>
-                </Link>
-                <Link to="/formularioTema" className="text-decorator-none">
-                <Box mx={1} className='cursor'>
-                    <Typography variant="h6" color="inherit">
-                        cadastrar tema
-                    </Typography>
-                </Box>
-                </Link>
-              
-                    <Box mx={1} className='cursor' onClick={goLogout}>
-                        <Typography variant="h6" color="inherit">
-                            logout
-                        </Typography>
-                    </Box>
-                
-            </Box>
+  let navbarComponent;
 
-        </Toolbar>
-    </AppBar>
-    }
-    return (
-        <>
-            {navbarComponent}
-        </>
-    )
+  if(token !== ""){
+    navbarComponent = <AppBar position="static" className="navbar">
+    <Toolbar variant="dense">
+      <Grid container justifyContent={"space-between"}>
+        <Box className="cursor">
+          <Typography variant="h5" color="inherit">
+            BlogPessoal
+          </Typography>
+        </Box>
+        <Box display="flex" justifyContent="start">
+        <Link to='/home' className="text-decorator-none">
+          <Box mx={1} className="cursor">
+            <Typography variant="h6" color="inherit" >
+              home
+            </Typography>
+          </Box>
+          </Link>
+          <Link to='/postagens' className="text-decorator-none">
+          <Box mx={1} className="cursor">
+            <Typography variant="h6" color="inherit">
+              postagens
+            </Typography>
+          </Box>
+          </Link>
+          <Link to='/temas' className="text-decorator-none">
+          <Box mx={1} className="cursor">
+            <Typography variant="h6" color="inherit">
+              temas
+            </Typography>
+          </Box>
+          </Link>
+          <Link to='/cadastrarTemas' className="text-decorator-none">
+          <Box mx={1} className="cursor">
+            <Typography variant="h6" color="inherit">
+              cadastrar tema
+            </Typography>
+          </Box>
+          </Link>
+          <Box mx={1}className="cursor" onClick={goLogout}>
+            <Typography variant="h6" color="inherit">
+              logout
+            </Typography>
+          </Box>
+        </Box>
+      </Grid>
+    </Toolbar>
+  </AppBar>
+
+  }
+
+  return (
+    <>
+      {navbarComponent}
+    </>
+  );
 }
-
 export default Navbar;
